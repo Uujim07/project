@@ -1,6 +1,7 @@
 import React from "react";
 import img from "./logo-default.png";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios"
 const styles = {
   container: {
     display: "flex",
@@ -68,9 +69,10 @@ const styles = {
   },
   footer: {
     display: "flex",
-    alignItems: "center",
+    alignItems: "end",
     justifyContent: "center",
-    height: "50vh",
+    height: "35vh",
+
   },
   id: {
     display: "block",
@@ -84,16 +86,59 @@ const styles = {
     marginLeft: "350px",
     height: "10vh",
   },
+  result:{
+    marginLeft:"300px"
+  }
 };
 const Home = () => {
+    
   const [message, setMessage] = useState("");
-  const [updated, setUpdated] = useState(message);
+  const [updated, setUpdated] = useState([]);
+//   useEffect(() => {
+//         axios.post("http://localhost:8000/user/",{
+//             original: message
+//         })
+//         .then(res => {
+//             console.log(res.data);
+//           })
+//           .catch(err => {
+//             console.log(err.message);
+//           });
+
+//         setMessage("")
+//   }, [message]);
   const handleChange = (event) => {
     setMessage(event.target.value);
     console.log(event.target.value);
   };
   const copy = () => {
-    setUpdated(message);
+    axios.post("http://localhost:8000/user/",{
+            original: message
+        })
+        .then(res => {
+            console.log(res.data);
+          })
+          .catch(err => {
+            console.log(err.message);
+          });
+
+        setMessage("")
+    if (!message==""){
+        setUpdated((current) => [...current, message]);
+        console.log(updated);
+    }
+    
+  };
+  const Done = ({link}) => {
+    
+        return (
+            <div style={styles.url}>
+              <div>Өгөгдсөн холбоос:</div>
+              <div>message: {link}</div>
+            </div>
+          );  
+    
+    
   };
   return (
     <div>
@@ -117,10 +162,13 @@ const Home = () => {
           Богиносгох
         </button>
       </div>
-      <div style={styles.url}>
-        <div>Өгөгдсөн холбоос:</div>
-        <div>Message: {updated}</div>
+      <div style={styles.result}>
+      {updated &&
+        updated.map((e, index) => {
+          return <Done key={index} link={e} />;
+        })}
       </div>
+      
       <div style={styles.footer}>
         <div style={styles.id}>
           <div>Made with ♥️ by Nest Academy</div>
