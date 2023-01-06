@@ -1,3 +1,4 @@
+const { findByIdAndRemove } = require("./dapi");
 const Comment = require("./dapi")
 
 exports.getUser = async (req, res, next)=>{
@@ -18,7 +19,6 @@ exports.getUser = async (req, res, next)=>{
 exports.createUser = async (req, res, next) =>{
     console.log(req.body)
     const category = await Comment.create(req.body)
-    
     if(!category){
         res
         .status(400).json({
@@ -30,6 +30,7 @@ exports.createUser = async (req, res, next) =>{
     .status(200).json({
         success: true,
         message: "Shine hereglegch uussen",
-        data: category
+        data: category.id,
+        name: category.original
     })
 }

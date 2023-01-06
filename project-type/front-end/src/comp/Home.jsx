@@ -82,34 +82,41 @@ const styles = {
     paddingLeft: "40px",
   },
   url: {
-    display: "block",
-    marginLeft: "350px",
-    height: "10vh",
+    display: "flex",
+    gap:"150px",
+    marginLeft: "17vw",
   },
   result:{
-    marginLeft:"300px"
+    marginLeft:"17vw"
+  },
+  line:{
+    width:"30vw",
+    height:"1px",
+    backgroundColor:"grey",
+    marginLeft:"17vw",
+    marginBottom:"50px"
+  },
+  button4:{
+    border:"none",
+    backgroundColor:"white",
+    color:"green",
+    textDecoration:"underline",
+    paddingBottom:"50px"
+  },
+  hyzgaar :{
+    width:"500px",
+    height:"auto",
+    overflow:"wrap"
   }
 };
 const Home = () => {
     
   const [message, setMessage] = useState("");
   const [updated, setUpdated] = useState([]);
-//   useEffect(() => {
-//         axios.post("http://localhost:8000/user/",{
-//             original: message
-//         })
-//         .then(res => {
-//             console.log(res.data);
-//           })
-//           .catch(err => {
-//             console.log(err.message);
-//           });
-
-//         setMessage("")
-//   }, [message]);
+  const [text, setText]= useState(["http://localhost:3000"])
   const handleChange = (event) => {
     setMessage(event.target.value);
-    console.log(event.target.value);
+
   };
   const copy = () => {
     axios.post("http://localhost:8000/user/",{
@@ -126,20 +133,33 @@ const Home = () => {
     if (!message==""){
         setUpdated((current) => [...current, message]);
         console.log(updated);
-    }
-    
+    } 
   };
   const Done = ({link}) => {
-    
         return (
+          <div>
             <div style={styles.url}>
-              <div>Өгөгдсөн холбоос:</div>
-              <div>message: {link}</div>
+              <div>
+                <div>Өгөгдсөн холбоос:</div>
+                <div style={styles.hyzgaar}>{link}</div> 
+              </div>
+              <div>
+                <div>Богино холбоос:</div>
+                <div>{text}</div>
+              </div>
+              <button style={styles.button4} onClick={Huulah}>Хуулж авах</button>
             </div>
+            <div style={styles.line}></div>
+          </div>
+            
           );  
     
     
   };
+  const Huulah = async() =>{
+    await navigator.clipboard.writeText(text);
+    alert('Text copied');
+  }
   return (
     <div>
       <div style={styles.container}>
