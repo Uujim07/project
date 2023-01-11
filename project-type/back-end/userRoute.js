@@ -5,6 +5,8 @@ const {
     createUser,
 }= require("./controllor")
 router
+    .get("/",getUser)
     .post("/",createUser)
     .get("/:id",getUser)
+    
 module.exports = router;

@@ -1,7 +1,7 @@
 import React from "react";
 import img from "./logo-default.png";
 import { useState, useEffect } from "react";
-import axios from "axios"
+import axios from "axios";
 const styles = {
   container: {
     display: "flex",
@@ -72,7 +72,6 @@ const styles = {
     alignItems: "end",
     justifyContent: "center",
     height: "35vh",
-
   },
   id: {
     display: "block",
@@ -83,83 +82,93 @@ const styles = {
   },
   url: {
     display: "flex",
-    gap:"150px",
+    gap: "150px",
     marginLeft: "17vw",
   },
-  result:{
-    marginLeft:"17vw"
+  result: {
+    marginLeft: "17vw",
   },
-  line:{
-    width:"30vw",
-    height:"1px",
-    backgroundColor:"grey",
-    marginLeft:"17vw",
-    marginBottom:"50px"
+  line: {
+    width: "30vw",
+    height: "1px",
+    backgroundColor: "grey",
+    marginLeft: "17vw",
+    marginBottom: "50px",
   },
-  button4:{
-    border:"none",
-    backgroundColor:"white",
-    color:"green",
-    textDecoration:"underline",
-    paddingBottom:"50px"
+  button4: {
+    border: "none",
+    backgroundColor: "white",
+    color: "green",
+    textDecoration: "underline",
+    paddingBottom: "50px",
   },
-  hyzgaar :{
-    width:"500px",
-    height:"auto",
-    overflow:"wrap"
-  }
+  hyzgaar: {
+    width: "500px",
+    height: "auto",
+    overflow: "wrap",
+  },
 };
 const Home = () => {
-    
   const [message, setMessage] = useState("");
   const [updated, setUpdated] = useState([]);
-  const [text, setText]= useState(["http://localhost:3000"])
   const handleChange = (event) => {
     setMessage(event.target.value);
-
   };
-  const copy = () => {
-    axios.post("http://localhost:8000/user/",{
-            original: message
-        })
-        .then(res => {
-            console.log(res.data);
-          })
-          .catch(err => {
-            console.log(err.message);
-          });
+  const copy =  () => {
+     axios
+      .post("http://localhost:8000/user/", {
+        original: message,
+      })
+      .then((res) => {
+        console.log('====>1',res.data);
+        const damn = res.data.data;
+        // setText(`http://localhost:8000/user/${damn}`);
+        if (!message == "") {
+          setUpdated((current) => [
+            ...current,
+            { origin: message, short: `http://localhost:8000/user/${damn}` },
+          ]);
+          // setType({origin:updated})
+          console.log('===>2',updated);
+        }
+        // setType({short:text})
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
 
-        setMessage("")
-    if (!message==""){
-        setUpdated((current) => [...current, message]);
-        console.log(updated);
-    } 
+    setMessage("");
+    // if (!message == "") {
+    //   setUpdated((current) => [...current, { origin: message, short: text }]);
+    //   // setType({origin:updated})
+    //   console.log(updated);
+    // }
   };
-  const Done = ({link}) => {
-        return (
+  const Done = ({ link, short }) => {
+    return (
+      <div>
+        <div style={styles.url}>
           <div>
-            <div style={styles.url}>
-              <div>
-                <div>Өгөгдсөн холбоос:</div>
-                <div style={styles.hyzgaar}>{link}</div> 
-              </div>
-              <div>
-                <div>Богино холбоос:</div>
-                <div>{text}</div>
-              </div>
-              <button style={styles.button4} onClick={Huulah}>Хуулж авах</button>
-            </div>
-            <div style={styles.line}></div>
+            <div>Өгөгдсөн холбоос:</div>
+            <div style={styles.hyzgaar}> {link}</div>
           </div>
-            
-          );  
-    
-    
+          <div>
+            <div>Богино холбоос:</div>
+            <div>{short}</div>
+          </div>
+          <button
+            style={styles.button4}
+            onClick={() => {
+              navigator.clipboard.writeText(short);
+            }}
+          >
+            Хуулж авах
+          </button>
+        </div>
+        <div style={styles.line}></div>
+      </div>
+    );
   };
-  const Huulah = async() =>{
-    await navigator.clipboard.writeText(text);
-    alert('Text copied');
-  }
   return (
     <div>
       <div style={styles.container}>
@@ -183,12 +192,13 @@ const Home = () => {
         </button>
       </div>
       <div style={styles.result}>
-      {updated &&
-        updated.map((e, index) => {
-          return <Done key={index} link={e} />;
-        })}
+        {updated &&
+          updated.map((e, index) => {
+            // console.log(updated, text);
+            return <Done key={index} link={e.origin} short={e.short} />;
+          })}
       </div>
-      
+
       <div style={styles.footer}>
         <div style={styles.id}>
           <div>Made with ♥️ by Nest Academy</div>

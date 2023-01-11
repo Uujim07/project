@@ -9,12 +9,16 @@ exports.getUser = async (req, res, next)=>{
             success:false,
             data: category
         })
+        
     }
-    res
-    .status(200).json({
-        success:true,
-        data: category,
-    })
+    console.log(category.original)
+    res.redirect(category.original)
+    // res
+    // .status(200).json({
+    //     success:true,
+    //     data: category,
+        
+    // })
 }
 exports.createUser = async (req, res, next) =>{
     console.log(req.body)
