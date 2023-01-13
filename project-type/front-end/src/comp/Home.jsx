@@ -1,6 +1,6 @@
 import React from "react";
 import img from "./logo-default.png";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 const styles = {
   container: {
@@ -83,16 +83,16 @@ const styles = {
   url: {
     display: "flex",
     gap: "150px",
-    marginLeft: "17vw",
+    marginLeft: "10vw",
   },
   result: {
-    marginLeft: "17vw",
+    marginLeft: "10vw",
   },
   line: {
     width: "30vw",
     height: "1px",
     backgroundColor: "grey",
-    marginLeft: "17vw",
+    marginLeft: "10vw",
     marginBottom: "50px",
   },
   button4: {
@@ -115,34 +115,23 @@ const Home = () => {
     setMessage(event.target.value);
   };
   const copy =  () => {
-     axios
+    if(!message==""){
+      axios
       .post("http://localhost:8000/user/", {
-        original: message,
+        original: message
       })
       .then((res) => {
-        console.log('====>1',res.data);
+        console.log(res.data)
         const damn = res.data.data;
-        // setText(`http://localhost:8000/user/${damn}`);
-        if (!message == "") {
           setUpdated((current) => [
             ...current,
             { origin: message, short: `http://localhost:8000/user/${damn}` },
           ]);
-          // setType({origin:updated})
-          console.log('===>2',updated);
-        }
-        // setType({short:text})
       })
       .catch((err) => {
         console.log(err.message);
       });
-
-    setMessage("");
-    // if (!message == "") {
-    //   setUpdated((current) => [...current, { origin: message, short: text }]);
-    //   // setType({origin:updated})
-    //   console.log(updated);
-    // }
+    }
   };
   const Done = ({ link, short }) => {
     return (
@@ -193,12 +182,10 @@ const Home = () => {
       </div>
       <div style={styles.result}>
         {updated &&
-          updated.map((e, index) => {
-            // console.log(updated, text);
+          updated.slice(0).reverse().map((e, index) => {
             return <Done key={index} link={e.origin} short={e.short} />;
           })}
       </div>
-
       <div style={styles.footer}>
         <div style={styles.id}>
           <div>Made with ♥️ by Nest Academy</div>

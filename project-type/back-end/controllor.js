@@ -9,18 +9,21 @@ exports.getUser = async (req, res, next)=>{
             success:false,
             data: category
         })
-        
     }
-    console.log(category.original)
     res.redirect(category.original)
-    // res
-    // .status(200).json({
-    //     success:true,
-    //     data: category,
-        
-    // })
 }
 exports.createUser = async (req, res, next) =>{
+    const oldLInk = await Comment.findOne({original:req.body.original})
+    if(oldLInk){
+        return res
+        .status(200).json({
+            success: true,
+            message: "huuchin hereglegch garsan",
+            name:oldLInk.original,
+            data: oldLInk.id
+
+        })
+    }
     console.log(req.body)
     const category = await Comment.create(req.body)
     if(!category){
