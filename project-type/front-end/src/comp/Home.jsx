@@ -117,7 +117,7 @@ const Home = () => {
   const copy =  () => {
     if(!message==""){
       axios
-      .post("http://localhost:8000/user/", {
+      .post("http://localhost:8000/comment/", {
         original: message
       })
       .then((res) => {
@@ -125,7 +125,7 @@ const Home = () => {
         const damn = res.data.data;
           setUpdated((current) => [
             ...current,
-            { origin: message, short: `http://localhost:8000/user/${damn}` },
+            { origin: message, short: `http://localhost:8000/comment/${damn}` },
           ]);
       })
       .catch((err) => {
